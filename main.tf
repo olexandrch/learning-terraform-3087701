@@ -46,6 +46,7 @@ resource "aws_instance" "blog" {
 }
 
 
+
 module "blog_alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
@@ -62,9 +63,8 @@ module "blog_alb" {
     {
       name_prefix      = "blog-"
       backend_protocol = "HTTP"
-      port             = 80
+      backend_port     = 80
       target_type      = "instance"
-      target_id        = aws_instance.blog.id
     }
   ]
 
