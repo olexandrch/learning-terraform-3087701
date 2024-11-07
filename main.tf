@@ -54,9 +54,14 @@ module "alb" {
   security_groups = [module.blog_sg.security_group_id]
 
   listeners = {
-    http-listener = {
+    ex-http = {
       port     = 80
       protocol = "HTTP"
+      
+      default_action = {
+        type = "forward"
+        target_group_key = "ex-instance"  # References the target group defined below
+      }
     }
   }
 
@@ -66,7 +71,13 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = aws_instance.blog.id
+      
+      targets = {
+        my_target = {
+          target_id = aws_instance.blog.id
+          port      = 80
+        }
+      }
     }
   }
 
